@@ -1,16 +1,16 @@
 package com.mascotitas.api.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
-@Entity
+import javax.annotation.processing.Generated;
 @Getter
 @Setter
 
+@Entity
+@Table (name = "adoptantes")
 
 public class Adoptante {
     @Id

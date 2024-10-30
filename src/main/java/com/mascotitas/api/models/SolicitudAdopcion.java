@@ -6,9 +6,11 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
+
+@Entity
+@Table (name = "solicitud_adopcion")
 
 public class SolicitudAdopcion {
 
