@@ -28,13 +28,13 @@ public class AnimalController {
 
     @CrossOrigin
     @GetMapping
-    public List<Animal> getAllMovies() {
+    public List<Animal> getAll() {
         return animalRepository.findAll();
     }
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<Animal> getMovieById(@PathVariable Long id) {
+    public ResponseEntity<Animal> getById(@PathVariable Long id) {
         Optional<Animal> data = animalRepository.findById(id);
         return data.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
