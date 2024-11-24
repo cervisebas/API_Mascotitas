@@ -28,20 +28,20 @@ public class AdoptanteController {
 
     @CrossOrigin
     @GetMapping
-    public List<Adoptante> getAllMovies() {
+    public List<Adoptante> getAll() {
         return adoptanteRepository.findAll();
     }
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<Adoptante> getMovieById(@PathVariable Long id) {
+    public ResponseEntity<Adoptante> getById(@PathVariable Long id) {
         Optional<Adoptante> data = adoptanteRepository.findById(id);
         return data.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<Adoptante> create(@RequestBody Adoptante adoptante){
+    public ResponseEntity<Adoptante> create(@RequestBody Adoptante adoptante) {
         Adoptante save = adoptanteRepository.save(adoptante);
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }

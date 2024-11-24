@@ -24,46 +24,59 @@ import java.util.Optional;
 public class SolicitudAdopcionController {
     
     @Autowired
-    private SolicitudAdopcionRepository adoptanteRepository;
+    private SolicitudAdopcionRepository solicitudAdopcionRepository;
 
     @CrossOrigin
     @GetMapping
-    public List<SolicitudAdopcion> getAllMovies() {
-        return adoptanteRepository.findAll();
+    public List<SolicitudAdopcion> getAll() {
+        return solicitudAdopcionRepository.findAll();
     }
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitudAdopcion> getMovieById(@PathVariable Long id) {
-        Optional<SolicitudAdopcion> data = adoptanteRepository.findById(id);
+    public ResponseEntity<SolicitudAdopcion> getById(@PathVariable Long id) {
+        Optional<SolicitudAdopcion> data = solicitudAdopcionRepository.findById(id);
         return data.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<SolicitudAdopcion> create(@RequestBody SolicitudAdopcion adoptante){
-        SolicitudAdopcion save = adoptanteRepository.save(adoptante);
-        return ResponseEntity.status(HttpStatus.CREATED).body(save);
+    public ResponseEntity<String> create(@RequestBody SolicitudAdopcion solicitud) {
+        Boolean animalIsAdopted = false;
+        List<SolicitudAdopcion> list = solicitudAdopcionRepository.findAll();
+
+        for (SolicitudAdopcion solicitudAdopcion : list) {
+            if (solicitudAdopcion.getMascota().getId() == solicitud.getMascota().getId()) {
+                animalIsAdopted = true;
+            }
+        }
+
+        if (animalIsAdopted) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La mascota ya esta adoptada.");
+        }
+
+        solicitudAdopcionRepository.save(solicitud);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Adoptado con exito");
     }
 
     @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        if(!adoptanteRepository.existsById(id)){
+        if(!solicitudAdopcionRepository.existsById(id)){
             return ResponseEntity.notFound().build();
         }
-        adoptanteRepository.deleteById(id);
+        solicitudAdopcionRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @CrossOrigin
     @PutMapping("/{id}")
     public ResponseEntity<SolicitudAdopcion> update(@PathVariable Long id,@RequestBody SolicitudAdopcion update){
-        if(!adoptanteRepository.existsById(id)){
+        if(!solicitudAdopcionRepository.existsById(id)){
             return ResponseEntity.notFound().build();
         }
         update.setId(id);
-        SolicitudAdopcion saved = adoptanteRepository.save(update);
+        SolicitudAdopcion saved = solicitudAdopcionRepository.save(update);
         return  ResponseEntity.ok(saved);
     }
 }
